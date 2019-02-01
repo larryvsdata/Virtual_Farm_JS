@@ -1,0 +1,37 @@
+
+<h1 class="farmName"><%= @farm.name %></h1>
+<p class="farmDescription"><%= @farm.description %></p>
+<a href="#" class="js-next" data-id="<%=@farm.id%>">Next Farm</a>
+<div id='trial'> </div>
+
+<% if current_owner && @farm.owners.include?(current_owner)%>
+    <form action="/farms/sell_farm" method="post">
+      <%= tag(:input , :type => "hidden" , :name => :farm_id , :value => @farm.id)%>
+      <input type='submit' value="Sell this farm">
+    </form>
+    <br>
+<%= link_to "Back to Owner's page" , owner_path(current_owner)%><br>
+
+<%end%>
+
+<br><br><br>
+<% if   is_signed_in? && current_owner.admin %>
+  <p>Add an animal: </p>
+  <%= form_for(Animal.new)  do |f|%>
+    <%= f.hidden_field :farm_id , value: @farm.id%> </br></br>
+    <label>Name:  </label>    <input type="text_field" id="animal[name]" name="animal[name]"></br>
+    <label>Quantity: </label>  <input type="number_field" id="animal[quantity]" name="animal[quantity]"></br>
+    <label>Unit Price: </label>  <input type="number_field" id="animal[unit_price]" name="animal[unit_price]"></br>
+  <%= button_tag "Add new animal to this farm"%>
+  <%end%>
+<%end%>
+
+<br>
+<%= link_to 'Index Page' , root_path%>
+
+<% if is_signed_in? && current_owner.admin %>
+    <%= link_to "Delete this Farm" , delete_farm_path(@farm) , method: 'delete'%>
+<%end%>
+
+
+<%= javascript_include_tag 'comments_index.js'%>

@@ -1,0 +1,11 @@
+<%= form_tag('/owners/:id/getcoowner'  , method: 'post' )  do  %>
+
+<div class="owners">
+<%=  select_tag "coowner" , options_from_collection_for_select(@coowners , "id" , "name") %>
+<%=  select_tag "farm" , options_from_collection_for_select(@farms , "id" , "name") %>
+
+
+    <%= submit_tag 'Select' %> <br>
+  </div>
+
+<%end%>

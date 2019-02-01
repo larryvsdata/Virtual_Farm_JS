@@ -1,0 +1,50 @@
+
+
+<% if @owner && @owner== current_owner%>
+
+<h1>Welcome <%= @owner.name%> to your page! </h1>
+<p>You have <%= @owner.money%>$ in your account.</p>
+
+<% if @owner.farms != []%>
+<h2>Farms you own are: </h2>
+  <%@owner.farms.each do |farm|%>
+  <p> <%= farm.name%>:</p>
+      <ul>Net worth: <%= farm.get_value%> </ul>
+
+          <form action="/farms/sell_farm" method="post">
+            <%= tag(:input , :type => "hidden" , :name => :farm_id , :value => farm.id)%>
+            <input type='submit' value="Sell this farm">
+          </form>
+          <br>
+      <%= link_to "Browse this farm" , farm_path(farm)%><br>
+  <%end%>
+
+<%else%>
+  <p>You don't have any farms at the moment.</p>
+<%end%>
+
+<%else%>
+
+<% if @owner.farms != []%>
+<h2>Farms <%=@owner.name%> owns are: </h2>
+  <%@owner.farms.each do |farm|%>
+  <p> <%= farm.name%>:</p>
+      <ul>Net worth: <%= farm.get_value%> </ul>
+
+      <%  if current_owner && current_owner.admin %>
+            <%= link_to "Delete this Farm" , delete_farm_path(farm) , method: 'delete'%><br><br>
+      <%end%>
+  <%end%>
+
+<%else%>
+  <p><%=@owner.name%> doesn't have any farms at the moment.</p>
+<%end%>
+
+<%end%>
+
+<br><br>
+<%= link_to 'Index Page' , root_path%>
+<br><br>
+<%if current_owner%>
+  <%= link_to "Sign Out" , signout_path , method: 'delete' %> <br><br>
+<%end%>

@@ -1,0 +1,29 @@
+
+
+
+
+<% if @farm%>
+  <h1>Belonging to  <%=@farm.name %> </h1>
+<%end%>
+
+
+<div>
+<label>Name : </label>
+<ul><%=@animal.name %> </ul>
+</div>
+
+<div>
+<label>Quantity : </label>
+<ul><%=@animal.quantity %> </ul>
+</div>
+
+<div>
+<label>Unit Price : </label>
+<ul><%=@animal.unit_price %></ul>
+</div>
+
+<%if current_owner.admin && @farm %>
+  <%= link_to "Delete this Animal" , delete_animal_path(@farm , @animal) , method: 'delete'%><br><br>
+<%end%>
+
+<%= link_to 'Back to Index' , root_path%>

@@ -1,0 +1,21 @@
+<%= form_for @farm do |f| %>
+ 
+<% if @farm && @farm.errors.any?%>
+<ul>
+    <% @farm.errors.full_messages.each do |message|%>
+      <li><%= message%></li>
+    <%end%>
+</ul>
+<%end%>
+<br>
+
+  <div class="field">
+    <%= f.label :name %> <br>
+    <%= f.text_field :name %> <br>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %> <br>
+  </div>
+
+<%end%>

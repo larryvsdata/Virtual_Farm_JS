@@ -1,0 +1,14 @@
+
+<%= form_for(@animal) do |f|%>
+
+  <%= f.hidden_field :farm_id , value: params[:farm_id]%>
+
+  <label>Name: </label> <%= f.text_field :name%> <br><br>
+
+
+  <label>Quantity: </label> <%= f.number_field :quantity%><br><br>
+
+
+  <label>Unit Price: </label> <%= f.number_field :unit_price%> <br><br>
+  <%=f.submit%>
+<%end%>

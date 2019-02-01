@@ -1,0 +1,79 @@
+<% if current_owner%>
+  <p>Welcome <%= current_owner.name%>!</p>
+  <p>You have <%= current_owner.money%>$.</p>
+<%end%>
+
+<h1>Farms available for purchase:</h1>
+<% if @available_farms %>
+  <% @available_farms.each do |farm|%>
+      <h3><%= farm.name %></h3>
+      <div id="farm-<%= farm.id %>"><%= truncate(farm.get_description()) %></div>
+      <button class="js-more" data-id="<%= farm.id %>">More Info</button>
+      <ul id="farm-<%= farm.id %>-animals">
+      </ul>
+
+      <% if current_owner%>
+          <form action="/farms/buy_farm" method="post">
+            <%= tag(:input , :type => "hidden" , :name => :farm_id , :value => farm.id)%>
+            <input type='submit' value="Buy this farm">
+          </form><br>
+
+          <%  if current_owner && current_owner.admin %>
+                <%= link_to "Delete this Farm" , delete_farm_path(farm) , method: 'delete'%><br><br>
+          <%end%>
+
+      <%end%>
+
+<%end%>
+
+  <%else%>
+    <p>None at the moment. Please check back later. </p>
+
+  <%end%>
+
+
+
+  <br> <br>
+   <% if current_owner%>
+     <%=link_to "Your Farms" , owner_path(current_owner)%> <br>
+     <%=link_to "Sign Out" , signout_path , method: 'delete'%><br>
+  <%end%>
+     <% if current_owner && current_owner.admin %>
+       <%=link_to "Add New Farm" , new_farm_path %>
+     <%end%>
+
+
+<!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+  <script type="text/javascript" charset="utf-8">
+     $(function() {
+       $(".js-more").on("click", function() {
+         var id = $(this).data("id");
+         // console.log(id)
+         $.get("/farms/" + id + ".json", function(data) {
+           var farm = data;
+          // console.log(data)
+           var descriptionText = "<p>" + farm["description"] + "</p>" ;
+        //   console.log(farm.animals[0])
+           $("#farm-" + id).html(descriptionText);
+
+         });
+       });
+     });
+     </script>
+
+
+<!-- <button id = 'create_comment_form'> Leave A Comment: </button> -->
+<h1>  Leave A Comment: </h1>
+<div id='comments'> </div>
+
+<!-- <div id="latest-comment"></div> -->
+
+
+ <!-- <form onsubmit='getComment(), return false;'> -->
+<form>
+  <textarea id="yourComment"> </textarea> <br>
+  <input type='submit' id="yourCommentSubmit">
+</form>
+
+
+<%= javascript_include_tag 'comments_index.js'%>
