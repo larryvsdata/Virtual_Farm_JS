@@ -44,7 +44,7 @@
 
 
 <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
-  <script type="text/javascript" charset="utf-8">
+  <!-- <script type="text/javascript" charset="utf-8">
      $(function() {
        $(".js-more").on("click", function() {
          var id = $(this).data("id");
@@ -53,13 +53,20 @@
            var farm = data;
           // console.log(data)
            var descriptionText = "<p>" + farm["description"] + "</p>" ;
-        //   console.log(farm.animals[0])
+           var animalNames = farm.animals.map(animal => animal.name) ;
+
+           let subClassText = '<br>Animal species in this farm are: ';
+           for (var ii = 0 ; ii < animalNames.length ; ii++){
+             subClassText += '<br>'+ (ii+1) + ") " +  animalNames[ii] + '</br>' ;
+           }
+           descriptionText += subClassText ;
+           console.log(subClassText);
            $("#farm-" + id).html(descriptionText);
 
          });
        });
      });
-     </script>
+     </script> -->
 
 
 <!-- <button id = 'create_comment_form'> Leave A Comment: </button> -->
@@ -76,4 +83,4 @@
 </form>
 
 
-<%= javascript_include_tag 'comments_index.js'%>
+<%# <%= javascript_include_tag 'comments_index.js'%> %>
