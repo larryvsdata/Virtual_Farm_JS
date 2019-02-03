@@ -3,10 +3,13 @@ before_action :set_comment , only: [:show ,:edit , :update]
 skip_before_action :verify_authenticity_token
 
 def show
-  comment = @comment
+   @comment
+  # binding.pry
+  modifiedComment = {comment_text: @comment.comment_text , likes: @comment.likes , dislikes: @comment.dislikes}
+#  binding.pry
   respond_to do |format|
      format.html { render :show }
-     format.json { render json: comment }
+     format.json { render json: modifiedComment }
    end
 end
 
@@ -20,6 +23,21 @@ def create
 	# binding.pry
   @comment = Comment.create(comment_text: params[:comment][:comment_text])
   render json: @comment, status: 201
+end
+
+
+def increment_likes
+#  binding.pry
+  @comment = Comment.find_by(id: params[:id])
+#  binding.pry
+  @comment.increment_likes
+end
+
+def increment_dislikes
+#  binding.pry
+  @comment = Comment.find_by(id: params[:id])
+#  binding.pry
+  @comment.increment_dislikes
 end
 
 

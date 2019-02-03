@@ -27,5 +27,8 @@ Rails.application.routes.draw do
 
   get '/auth/:provider/callback', to: 'sessions#github_login'
 
+  patch '/comments/:id/increment_likes' , to: 'comments#increment_likes' ,  as: "increment_likes"
+  patch '/comments/:id/increment_dislikes' , to: 'comments#increment_dislikes' ,  as: "increment_dislikes"
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -9,7 +9,7 @@
 Farm.all.delete_all
 Animal.all.delete_all
 Owner.all.delete_all
-
+Comment.all.delete_all
 
 #Farms
 
