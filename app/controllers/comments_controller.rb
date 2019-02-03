@@ -41,6 +41,13 @@ def increment_dislikes
 end
 
 
+def destroy
+
+  @comment = Comment.find(params[:id])
+  @comment.destroy
+end
+
+
   private
   def set_comment
     @comment = Comment.find_by(id: params[:id])

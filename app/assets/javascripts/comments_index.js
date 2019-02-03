@@ -8,13 +8,44 @@ $(function () {
 })
 
 
+function getDelete(){
+	 // console.log('Inside getDelete');
+	$('.deletes').on('click',function (event) {
+		event.preventDefault();
+
+		 removeButtons($(this).attr('id'));
+	})
+}
+
+function removeButtons(id){
+
+	buttonLike = $('button#'+id+'.likes')
+	buttonDislike = $('button#'+id+'.dislikes')
+	buttonDelete =$('button#'+id+'.deletes')
+
+	buttonLike.remove()
+	buttonDislike.remove()
+	buttonDelete.remove()
+	$('#'+id+'.comments').text('')
+
+	$.ajax({
+		url: `http://localhost:3000/comments/${id}`,
+		 type: 'DELETE',
+		 dataType: 'json',
+
+	}).done(function (response) {
+
+		console.log(response);
+		});
+
+}
 
 
 function getLike(){
 	// console.log('Inside getLike');
 	$('.likes').on('click',function (event) {
 		event.preventDefault();
-		// console.log($(this).attr('id'));
+		 // console.log($(this).attr('id'));
 		incrementLike($(this).attr('id'));
 	})
 }
@@ -37,10 +68,10 @@ function alterLikeLabel(like_id){
 		 dataType: 'json',
 
 	}).done(function (response) {
-		// console.log(response.likes);
+		 // console.log(response.likes);
 
 		if(response.likes > 0){
-			$('.likes#'+like_id).text('LIKES:'+response.likes)
+			$('button#'+like_id+'.likes').text('LIKES:'+response.likes)
 		}
 
 		});
@@ -75,7 +106,7 @@ function incrementLike(like_id){
 
 	}).done(function (response) {
 		alterLikeLabel(like_id);
-
+		console.log(like_id);
 		});
 
 }
@@ -115,6 +146,7 @@ function loadPreviousComments(){
 		});
 	 getLike();
 	 getDislike();
+	 getDelete();
 	})
 
 }
@@ -151,12 +183,14 @@ function getComment() {
 	$('input#yourCommentSubmit').on('click', function (event) {
 		event.preventDefault()
 
-		let commentValue = $('#yourComment').val()
+		let commentValue = $('#yourComment').val();
 		let data = {
 			comment: {
 				comment_text: commentValue
 			}
 		}
+		$('#yourComment').val('')
+
 
 		$.ajax({
 			url: 'http://localhost:3000/comments',
@@ -169,9 +203,10 @@ function getComment() {
 
 			let myNewCommentHtml = myNewComment.commentHTML()
 
-			 $('div#comments').append(myNewCommentHtml)
+			 $('div#comments').append(myNewCommentHtml);
 			 getLike();
 			 getDislike();
+			 getDelete();
 		});
 
 	})
@@ -183,17 +218,55 @@ class MyComment {
 		this.comment_text = obj.comment_text
 		this.comment_id = obj.id
 	}
-}
+
+	static 	isAdmin(){
+		 $.ajax({
+			 async: false,
+			 url: 'http://localhost:3000/sessions/session_admin',
+				type: 'GET',
+				dataType: 'json',
+
+		 }).done(function (response) {
+				 // console.log(response.admin_status);
+
+				 MyComment.status = response.admin_status ;
+			 });
+
+			 // console.log(MyComment.status);
+			 return MyComment.status;
+	 }
+
+	}
+
+
+	MyComment.status = '';
+
+
+
 
 MyComment.prototype.commentHTML = function () {
-	return (`
-	<div>
+
+
+
+	var commentAndLikes=`
+	<div class = "comments" id = ${this.comment_id} >
 		<li>${this.comment_text}</li>
-	</div> <br>
+	</div>
 	 <button class = "likes" id = ${this.comment_id}> LIKE </button>
 	 <button class = "dislikes" id = ${this.comment_id}> DISLIKE </button>
+	 <br>
+`;
 
-`)
+	var deleteButton = `<button class = "deletes" id = ${this.comment_id}> Delete </button>`;
+
+	var completeComment = commentAndLikes;
+
+	// console.log(MyComment.isAdmin());
+	if (MyComment.isAdmin()){
+
+		completeComment += deleteButton ;
+	}
+
+
+	return completeComment;
 }
-
-// comment-id="<%= this.id %>"

@@ -30,5 +30,9 @@ Rails.application.routes.draw do
   patch '/comments/:id/increment_likes' , to: 'comments#increment_likes' ,  as: "increment_likes"
   patch '/comments/:id/increment_dislikes' , to: 'comments#increment_dislikes' ,  as: "increment_dislikes"
 
+  get '/sessions/session_admin', to: 'sessions#session_admin'
+
+  delete '/comments/:id' , to: 'comments#destroy' , as: "delete_comment"
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

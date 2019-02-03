@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-
+  skip_before_action :verify_authenticity_token
   def sign_in
     @owner = Owner.new
   end
@@ -31,6 +31,11 @@ class SessionsController < ApplicationController
       redirect_to signin_path
     end
 
+  end
+
+  def session_admin
+
+    render json:  {admin_status: is_signed_in? && current_owner.admin}
   end
 
   def sign_out
